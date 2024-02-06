@@ -1,0 +1,12 @@
+<person>
+    <name>Martin</name>
+    <age>29</age>
+    <hobbies>
+        <hobby>
+        test1
+        </hobby>
+        <hobby>
+        test2
+        </hobby>
+    </hobbies>
+</person>
