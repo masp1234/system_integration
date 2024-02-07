@@ -1,0 +1,22 @@
+<people>
+  <person>
+    <first_name>John</first_name>
+    <last_name>Doe</last_name>
+    <age>30</age>
+  </person>
+  <person>
+    <first_name>Jane</first_name>
+    <last_name>Smith</last_name>
+    <age>25</age>
+  </person>
+  <person>
+    <first_name>Mike</first_name>
+    <last_name>Johnson</last_name>
+    <age>35</age>
+  </person>
+  <person>
+    <first_name>Sarah</first_name>
+    <last_name>Williams</last_name>
+    <age>28</age>
+  </person>
+</people>

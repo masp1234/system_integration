@@ -1,17 +1,17 @@
 import fs from 'fs';
 
-fs.readFile('text.txt', 'utf8', (error, data) => {
+fs.readFile('text.txt', 'utf8', (error, personData) => {
     if (error) {
         console.log(error);
     }
-    const peopleData = data.split('\n').map(line => line.trim());
-    const peopleObjects = peopleData.map(person => {
-        data = person.split(',');
+    const peopleData = personData.split('\n').map(line => line.trim());
+    const people = peopleData.map(person => {
+        personData = person.split(',');
         return {
-            firstName: data[0],
-            lastName: data[1],
-            age: data[2]
+            firstName: personData[0],
+            lastName: personData[1],
+            age: personData[2]
         }
     })
-    console.log(peopleObjects);
+    console.log(people);
 })
