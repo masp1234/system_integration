@@ -1,10 +1,11 @@
 import yaml from 'js-yaml';
 import fs from 'fs';
 
-try {
-    const file = yaml.load(fs.readFileSync('./text.yaml', 'utf8'));
-    file.people.forEach(person => console.log(person));
-}
-catch (e) {
-    console.log(e);
-}
+fs.readFile('../data/text.yaml', 'utf8', (error, data) => {
+    if (error) {
+        console.log(error);
+    } else {
+        const file = yaml.load(data);
+        console.log(file.people);
+    }
+});

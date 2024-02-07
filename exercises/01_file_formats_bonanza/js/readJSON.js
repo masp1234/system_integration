@@ -1,3 +1,3 @@
-import people from './text.json' assert { type: "json" };
+import people from '../data/text.json' assert { type: "json" };
 
 console.log(people);
