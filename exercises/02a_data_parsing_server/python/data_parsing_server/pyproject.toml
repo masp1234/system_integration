@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "data-parsing-server"
+version = "0.1.0"
+description = ""
+authors = ["masp1234 <mart2c04@stud.kea.dk>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^3.0.2"
+pyyaml = "^6.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
