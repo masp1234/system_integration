@@ -1,7 +1,7 @@
 # Required setup
 
 -  Have Docker installed
--  Pull this repository and navigate into the ```04b_db_granular_access``` folder
+-  Clone this repository and navigate into the ```04b_db_granular_access``` folder
 -  Open a bash shell and run the following commands
     1.  ```sudo bash start-postgres-container.sh```
 
