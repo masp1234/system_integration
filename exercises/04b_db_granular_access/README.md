@@ -11,24 +11,34 @@
 
     4. ```psql -U rwuser -d postgres```
     
-    For the 4th command you might need to include '-h localhost' at the end of the command.
+For the 4th command you might need to include ```-h localhost``` at the end of the command.
 
-    After these steps a docker container with postgresql installed on it has been created, some tables and users have been created, and you'll also be logged in and be ready to try some queries.
+## After the setup
+After these steps a docker container with postgresql installed on it has been created, some tables created, and a user has been created. You'll also be logged in as the user after the setup steps has been completed.
 
-    There a 3 tables, all with different permissions set for the user.
+There a 3 tables, all with different permissions set for the user.
 
-    try this command ```\dt``` to see the existing tables
+Try this command ```\dt``` to see the existing tables
 
-    You can also use ```\h``` and ```\?``` to get help using the psql CLI tool.
+You can also use ```\h``` and ```\?``` to get help using the psql CLI tool.
 
 # Table permissions
 
-When logged in as the "rwuser" you have these permissions
+When logged in as the "rwuser" you have the following permissions
 
 ## Users
 - You can read usernames and cities, but not passwords
+- You can update the city column but nothing else
 
 ## Posts
+- You can read everything in this table
+- You can insert new entries
+- You can update the "text" column
+
+## Comments
+- You can read everything in this table
+- You can insert new entries
+- You can delete entries
 
 # Example commands to try, and their expected results
 

@@ -45,8 +45,7 @@ INSERT INTO comments (text, user_id, post_id) VALUES
     ('Comment 1 on Post 2', 1, 2),
     ('Comment 1 on Post 3', 2, 3);
 
--- Create users
-CREATE USER readuser WITH PASSWORD '123';
+-- Create user
 CREATE USER rwuser WITH PASSWORD '123';
 
 -- Grant privileges
@@ -54,10 +53,9 @@ GRANT SELECT (username, city) ON TABLE users TO rwuser;
 
 GRANT UPDATE (city) on TABLE users to rwuser;
 
+GRANT USAGE, SELECT ON SEQUENCE posts_post_id_seq TO rwuser;
 GRANT SELECT, INSERT ON TABLE posts TO rwuser;
 GRANT UPDATE (text) on TABLE posts to rwuser;
-
-GRANT USAGE, SELECT ON SEQUENCE posts_post_id_seq TO rwuser;
 
 GRANT USAGE, SELECT ON SEQUENCE comments_comment_id_seq TO rwuser;
 GRANT SELECT, INSERT, DELETE on table comments to rwuser;
