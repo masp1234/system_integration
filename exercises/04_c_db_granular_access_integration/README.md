@@ -11,6 +11,7 @@ Works as documented.
 
 ### Deleting a student
 ![delete student error](images/delete-student.png)
+
 Also works as expected; receiving a permission denied error.
 
 ### Inserting a student
@@ -36,11 +37,13 @@ Works as advertised.
 ### Selecting users
 
 ![selecting users error](images/select-users.png)
+
 Also works as advertised - not allowed to select everything from this table
 
 ### Selecting only user_name and user_address
 
 ![selecting user_name and user_address](images/select-user-name-and-user-address.png)
+
 Does not work as advertised. Should be possible to select these.
 
 ### Creating a table
