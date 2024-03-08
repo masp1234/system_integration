@@ -44,3 +44,5 @@ app.post("/subscribe", (req, res) => {
 const PORT = 8080;
 
 app.listen(PORT, () => console.log('Server is listening on port', PORT));
+
+export default app;
