@@ -6,10 +6,12 @@
     1.  ```sudo bash start-postgres-container.sh```
 
     2. ```sudo docker exec -it pg bash ```
+    
+    3. ```cd home/db-setup``` 
 
-    3. ```bash /home/db-setup/setup.sh```
+    4. ```bash setup.sh```
 
-    4. ```psql -U rwuser -d postgres```
+    5. ```psql -U rwuser -d postgres```
     
 For the 4th command you might need to include ```-h localhost``` at the end of the command.
 
