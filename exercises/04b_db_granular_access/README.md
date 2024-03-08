@@ -13,7 +13,7 @@
 
     5. ```psql -U rwuser -d postgres```
     
-For the 4th command you might need to include ```-h localhost``` at the end of the command.
+For the last command you might need to include ```-h localhost``` at the end of the command.
 
 ## After the setup
 After these steps a docker container with postgresql installed on it has been created, some tables created, and a user has been created. You'll also be logged in as the user after the setup steps has been completed.
