@@ -1,21 +1,34 @@
 import db from '../database/connection.js';
 
-function createSubscription(subscription) {
-    const stmt = db.prepare("INSERT INTO subscription (callback_url) VALUES (?)");
-    stmt.run(subscription.callback_url);
-    
-    const existingEventTypes = db.all("SELECT * FROM event");
+async function getSubscriptions() {
+    return await db.all("SELECT * FROM subscription")
+}
 
-    subscription.events.foreach(eventTypeToSubscribeTo => {
-        const foundEvent = existingEventTypes.find((existingEventType) => eventTypeToSubscribeTo === existingEventType)
-        if (foundEvent) {
-            const stmt = db.prepare("INSERT INTO subscription_event (subscription_id, event_id) VALUES (?, ?)");
-            stmt.run(foundEvent.id, );
-        }   
+async function getSubscriptionByPayloadUrl(payloadUrl) {
+    return await db.get('SELECT * FROM subscription WHERE payload_url = ?', payloadUrl);
+}
+
+async function createSubscription(subscription) {
+    const existingEventTypes = await db.all("SELECT * FROM event");
+    const eventsToAdd = existingEventTypes.filter((eventToAdd) => {
+        return !subscription.events.includes(eventToAdd.eventType);
     })
-    stmt.finalize();
+
+    if (eventsToAdd) {
+        console.log('Creating subscription', subscription);
+        const subscriptionStmt = await db.prepare("INSERT INTO subscription (payload_url) VALUES (?)");
+        const result = await subscriptionStmt.run(subscription.payloadUrl);
+        const subscriptionEventsStmt = await db.prepare("INSERT INTO subscription_event (subscription_id, event_id) VALUES (?, ?)");
+
+        for (const eventToAdd of eventsToAdd) {
+            await subscriptionEventsStmt.run([result.lastID, eventToAdd.id]);
+        }
+        await subscriptionStmt.finalize();
+    }
 }
 
 export {
+    getSubscriptions,
+    getSubscriptionByPayloadUrl,
     createSubscription
 }

@@ -1,45 +1,54 @@
 import express from 'express';
-import { createSubscription } from './services/subscriptionService';
+import { 
+    getSubscriptions,
+    getSubscriptionByPayloadUrl,
+    createSubscription,
+} from './services/subscriptionService.js';
 
 const app = express();
 app.use(express.json());
 
-const subscribedUrls = [];
+app.get("/ping", async (req, res) => {
+        const subscriptions = await getSubscriptions();
 
-app.get("/ping", (req, res) => {
-    subscribedUrls.forEach(async url => {
-        const responses = await Promise.all(subscribedUrls.map(async (url) => {
-             return await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                  },
-                body: JSON.stringify({
-                    message: "This is a ping test"
+        const responses = await Promise.all(subscriptions.map(async (subscription) => {
+            try {
+                const response =  await fetch(subscription.payload_url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                      },
+                    body: JSON.stringify({
+                        message: "This is a ping test"
+                    })
                 })
-            })
-        }))
-        let subscribersUpCount = 0;
-        responses.forEach((response) => {
-            if (response.status === 200) {
-                subscribersUpCount += 1;
+                return response
             }
-        })
-        if (responses.length === subscribersUpCount) {
-            console.log("All subscribers up.")
-        }
-        else {
-            console.log(`${subscribersUpCount} out of ${responses.length} subscripers up.`);
-        }
-    })
-    res.status(200).send({ message: "Ping requested successfully."});
-})
+            catch {
+                console.log(`No host found with payload URL: ${subscription.payload_url}`)
+            }         
+        }))
+        const filteredResponses = responses.filter((response) => response !== undefined)
+        filteredResponses.length === subscriptions.length
+            ? console.log('All subscribers are up.')
+            : console.log(`${filteredResponses.length} out of ${subscriptions.length} subscribers are up.`);
 
-app.post("/subscribe", (req, res) => {
-    if (!req.body.callback_url || !req.body.events) {
-        res.status(400).send({ message: 'Missing 1 or more required properties.' })
+        res.status(200).send({ message: "Ping requested successfully."});
+    })
+   
+
+
+app.post("/subscribe", async (req, res) => {
+    const { payloadUrl, events } = req.body;
+    if (!payloadUrl || !events) {
+        return res.status(400).send({ message: 'Missing 1 or more required properties.' });
+    };
+    const foundSubscription = await getSubscriptionByPayloadUrl(payloadUrl);
+    if (foundSubscription) {
+        return res.status(409).send({ message: `A subscription with payloadUrl: ${payloadUrl} already exists.`})
     }
-    createSubscription(req.body)
+
+    await createSubscription({payloadUrl, events})
     res.status(201).send('You are subscribed');
 })
 
