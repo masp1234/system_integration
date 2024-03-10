@@ -1,4 +1,5 @@
 import express from 'express';
+import { createSubscription } from './services/subscriptionService';
 
 const app = express();
 app.use(express.json());
@@ -35,9 +36,10 @@ app.get("/ping", (req, res) => {
 })
 
 app.post("/subscribe", (req, res) => {
-
-    subscribedUrls.push(req.body.subscriptionUrl);
-    console.log(subscribedUrls)
+    if (!req.body.callback_url || !req.body.events) {
+        res.status(400).send({ message: 'Missing 1 or more required properties.' })
+    }
+    createSubscription(req.body)
     res.status(201).send('You are subscribed');
 })
 
