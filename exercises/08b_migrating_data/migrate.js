@@ -2,17 +2,42 @@ import connectToMongoDB from "./db/connectToMongoDB.js";
 import connectToMySQL from "./db/connectToMySQL.js";
 
 const mongoConnection = await connectToMongoDB();
-
 const mysqlConnection = await connectToMySQL();
 
 const customers = await mongoConnection.collection('customers').find().toArray();
 const products = await mongoConnection.collection('products').find().toArray();
 
-console.log(customers);
+const createdProducts = [];
 
-console.log(products);
+for (const customer of customers) {
+    const [customerResults] = await mysqlConnection.execute('INSERT INTO customers(name, email) VALUES (?, ?)', [customer.name, customer.email]);
+        
+    for (const order of customer.orders) {
+        const [orderResults] = await mysqlConnection.execute('INSERT INTO orders(customer_id, total_amount) VALUES (?, ?)', [
+            customerResults.insertId, order.total_amount
+        ]);
 
-const [results, fields] = await mysqlConnection.query('SELECT * FROM customers');
+        for (const lineItem of order.productLineItems) {
+            const product = products.find((product) => product._id === lineItem.product_id);
+            if (product) {
+                let createdProduct = createdProducts
+                    .find((createdProduct) => createdProduct.sku === product.sku);
+                 
+                if (!createdProduct) {
+                    const [productResults] = await mysqlConnection.execute('INSERT INTO products(name, price, sku) VALUES (?, ?, ?)', [
+                        product.name, product.price, product.sku
+                    ]);
+                    createdProduct = {
+                        ...product,
+                        mysqlId: productResults.insertId
+                    }
+                    createdProducts.push(createdProduct);
+                }
 
-console.log(results);
-console.log(fields);
+                await mysqlConnection.execute('INSERT INTO product_line_items(order_id, product_id, quantity) VALUES (?, ?, ?)', [
+                    orderResults.insertId, createdProduct.mysqlId, lineItem.quantity
+                    ]);               
+            }
+        }
+    }
+}

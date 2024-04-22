@@ -4,13 +4,14 @@ USE webshop;
 CREATE TABLE IF NOT EXISTS customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
-    email VARCHAR(60)
+    email VARCHAR(60) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(200),
-    price DECIMAL(10, 2)
+    price DECIMAL(10, 2),
+    sku VARCHAR(50) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS orders (
