@@ -1,16 +1,23 @@
 import { MongoClient } from "mongodb";
 
-let connection;
+let client;
 
-export default async function connectToMongoDB() {
-    if (connection) {
-        return connection;
+export async function connectToMongoDB() {
+    const databaseName = 'mydatabase';
+    if (client) {
+        return client.db(databaseName);
     }
-    const client = new MongoClient('mongodb://root:123123@localhost:27018');
+    client = new MongoClient('mongodb://root:123123@localhost:27018');
     await client.connect();
-    connection = client.db('mydatabase');
     
-    return connection;
+    return client.db(databaseName);
+}
+
+export async function closeMongoDBConnection() {
+    if (client) {
+        await client.close();
+        client = null;
+    }
 }
 
 
