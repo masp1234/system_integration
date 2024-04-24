@@ -12,6 +12,8 @@ This is not needed, as you could just convert the setup.sql file to .dbml instea
 
 ### Converting a .sql file to .dbml
 
+For the global ``` npm install -g``` commands, you may need to run as ```sudo```
+
 Install dbml first ```npm install -g @dbml/cli```
 
 Now convert the dump.sql file to .dbml ```sql2dbml --mysql dump.sql --out-file  webshop.dbml```
