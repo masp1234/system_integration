@@ -1,0 +1,48 @@
+Table "customers" {
+  "id" int [pk, not null, increment]
+  "name" varchar(100) [default: NULL]
+  "email" varchar(60) [default: NULL]
+
+Indexes {
+  email [unique, name: "email"]
+}
+}
+
+Table "orders" {
+  "id" int [pk, not null, increment]
+  "customer_id" int [default: NULL]
+  "total_amount" decimal(10,2) [default: NULL]
+
+Indexes {
+  customer_id [name: "customer_id"]
+}
+}
+
+Table "product_line_items" {
+  "id" int [pk, not null, increment]
+  "order_id" int [default: NULL]
+  "product_id" int [default: NULL]
+  "quantity" int [default: NULL]
+
+Indexes {
+  order_id [name: "order_id"]
+  product_id [name: "product_id"]
+}
+}
+
+Table "products" {
+  "id" int [pk, not null, increment]
+  "name" varchar(200) [default: NULL]
+  "price" decimal(10,2) [default: NULL]
+  "sku" varchar(50) [default: NULL]
+
+Indexes {
+  sku [unique, name: "sku"]
+}
+}
+
+Ref "orders_ibfk_1":"customers"."id" < "orders"."customer_id"
+
+Ref "product_line_items_ibfk_1":"orders"."id" < "product_line_items"."order_id"
+
+Ref "product_line_items_ibfk_2":"products"."id" < "product_line_items"."product_id"
