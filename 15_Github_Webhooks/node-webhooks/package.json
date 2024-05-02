@@ -1,5 +1,5 @@
 {
-  "name": "node",
+  "name": "webhooks",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,6 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.3"
   }
 }
