@@ -6,7 +6,7 @@ const app = express();
 app.use(express.static("public"));
 
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY, {
-  apiVersion: "2020-08-27",
+  apiVersion: "2024-04-10",
 })
 
 const storeItems = new Map([
@@ -30,23 +30,23 @@ app.post('/webhook', express.raw({type: 'application/json'}), async (request, re
   switch (event.type) {
     case 'charge.failed':
       const chargeFailed = event.data.object;
+      console.log('\ncharge.failed\n', chargeFailed);
       break;
     case 'charge.succeeded':
       const chargeSucceeded = event;
-      console.log(chargeSucceeded);
+      console.log('\ncharge.succeeded\n', chargeSucceeded);
       break;
 
     case 'checkout.session.completed':
       const checkoutSessionCompleted = event.data.object;
-      console.log(checkoutSessionCompleted);
+      console.log('\ncheckout.session.completed\n', checkoutSessionCompleted);
       const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
         event.data.object.id,
         {
           expand: ['line_items'],
         }
       );
-      
-      console.log(sessionWithLineItems.line_items);
+      console.log('\ncheckout line items\n', sessionWithLineItems.line_items);
       break;
 
     default:
