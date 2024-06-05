@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Ticker SSE</title>
+</head>
+<body>
+    <h1>Stock Ticker Prices</h1>
+    <p>Status:</p>
+    <div id="status"></div>
+    <div id="stock-tickers"></div>
+
+    <script>
+        const statusDiv = document.getElementById("status");
+        const stockTickersDiv = document.getElementById("stock-tickers");
+
+        const eventSource = new EventSource("/stockData");
+
+        eventSource.addEventListener("message", (event) => {
+            const data = JSON.parse(event.data);
+            stockTickersDiv.innerHTML = '';
+
+            data.forEach(stock => {
+                const stockDiv = document.createElement('div');
+                stockDiv.textContent = `Ticker: ${stock.ticker}, Price: $${stock.price}, Timestamp: ${stock.timestamp}`;
+                stockTickersDiv.appendChild(stockDiv);
+            });
+        });
+
+        eventSource.addEventListener("open", (event) => {
+            statusDiv.textContent = "Connected";
+        });
+
+        eventSource.addEventListener("error", (event) => {
+            if (event.target.readyState === EventSource.CLOSED) {
+                statusDiv.textContent = 'Connection was closed';
+            } else if (event.target.readyState === EventSource.CONNECTING) {
+                statusDiv.textContent = 'Connecting...';
+            } else {
+                statusDiv.textContent = 'Error';
+            }
+        });
+    </script>
+</body>
+</html>
